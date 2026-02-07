@@ -3,9 +3,9 @@ interface LogoProps {
     height?: number;
 }
 
-function Logo({ width = 14, height = 14}: LogoProps) {
+function Logo({ width = 64, height = 64 }: LogoProps) {
     return (
-        <img src="/logo.svg" alt="Logo" className={`w-${width} h-${height}`} />
+        <img src="/logo.svg" alt="Logo" style={{ width: `${width}px`, height: `${height}px` }} />
     );
 }
 
