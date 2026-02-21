@@ -2,7 +2,16 @@ import { useState } from "react";
 import { Link, NavLink } from "react-router";
 import Logo from "../ui/Logo";
 
-function Navbar() {
+export interface NavItem {
+    to: string,
+    label: string,
+}
+
+interface NavbarProps {
+    links: Array<NavItem>,
+}
+
+function Navbar({ links }: NavbarProps) {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
     return (
@@ -18,8 +27,11 @@ function Navbar() {
 
                         {/* Desktop Nav */}
                         <div className="hidden sm:flex">
-                            <NavLink className="mx-2 text-2xl" to="/login">Login</NavLink>
-                            <NavLink className="mx-2 text-2xl" to="/register">Register</NavLink>
+                            {
+                                links.map((link) => (
+                                    <NavLink className="mx-2 text-2xl" to={link.to}>{link.label}</NavLink>
+                                ))
+                            }
                         </div>
                     </div>
 
@@ -46,8 +58,11 @@ function Navbar() {
                 </div>
 
                 <div className="flex flex-col">
-                    <NavLink onClick={() => setIsMobileMenuOpen(false)} className="mx-2 mb-1 text-2xl" to="/login">Login</NavLink>
-                    <NavLink onClick={() => setIsMobileMenuOpen(false)} className="mx-2 mb-1 text-2xl" to="/register">Register</NavLink>
+                    {
+                        links.map((link) => (
+                            <NavLink onClick={() => setIsMobileMenuOpen(false)} className="mx-2 mb-1 text-2xl" to={link.to}>{link.label}</NavLink>
+                        ))
+                    }
                 </div>
             </div>
         </>
