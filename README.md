@@ -3,7 +3,7 @@
 ### :rotating_light: This app is in active development
 
 ## Planned Features
-- Watchlist (Plan to Watch, Watching, Completed)
+- Watchlist (Plan to Watch, Watching, Completed) with categories (e.g. in Plan to Watch, categorize for "action" or "romance")
 - External metadata integreation (covers, description, cast, ratings, etc.)
 - Support for Movies, TV Shows, Anime
 - Discovery & Recommendation
