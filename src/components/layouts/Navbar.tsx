@@ -1,9 +1,28 @@
 import { useState } from "react";
 import { Link, NavLink } from "react-router";
 import Logo from "../ui/Logo";
+import { useMe } from "../../hooks/use_me";
+import Loading from "../ui/Loading";
+import { MeDropdown } from "./MeDropdown";
 
 function Navbar() {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+    const me = useMe();
+
+    const desktopAuthLinks = (
+        <>
+            <NavLink className="mx-2 text-2xl p-2.5" to="/login">Login</NavLink>
+            <NavLink className="mx-2 text-2xl bg-primary rounded-md p-2.5" to="/register">Register</NavLink>
+        </>
+    );
+
+    const mobileAuthLinks = (
+        <>
+            <NavLink onClick={() => setIsMobileMenuOpen(false)} className="mx-2 mb-1 text-2xl p-2.5" to="/login">Login</NavLink>
+            <NavLink onClick={() => setIsMobileMenuOpen(false)} className="mx-2 mb-1 text-2xl bg-primary rounded-md p-2.5" to="/register">Register</NavLink>
+        </>
+    );
 
     return (
         <>
@@ -25,8 +44,21 @@ function Navbar() {
                             </div>
                             {/* Right */}
                             <div className="ml-auto">
-                                <NavLink className="mx-2 text-2xl p-2.5" to="/login">Login</NavLink>
-                                <NavLink className="mx-2 text-2xl bg-primary rounded-md p-2.5" to="/register">Register</NavLink>
+                                {
+                                    me.isEnabled ? (
+                                        me.isPending ? (
+                                            <Loading />
+                                        ) : (
+                                            me.isSuccess ? (
+                                                <MeDropdown me={me.data} />
+                                            ) : (
+                                                desktopAuthLinks
+                                            )
+                                        )
+                                    ) : (
+                                        desktopAuthLinks
+                                    )
+                                }
                             </div>
                         </div>
                     </div>
@@ -63,8 +95,21 @@ function Navbar() {
 
                 {/* Link (bottom) */}
                 <div className="flex mt-auto mx-auto">
-                    <NavLink onClick={() => setIsMobileMenuOpen(false)} className="mx-2 mb-1 text-2xl p-2.5" to="/login">Login</NavLink>
-                    <NavLink onClick={() => setIsMobileMenuOpen(false)} className="mx-2 mb-1 text-2xl bg-primary rounded-md p-2.5" to="/register">Register</NavLink>
+                    {
+                        me.isEnabled ? (
+                            me.isPending ? (
+                                <Loading />
+                            ) : (
+                                me.isSuccess ? (
+                                    <MeDropdown me={me.data} />
+                                ) : (
+                                    mobileAuthLinks
+                                )
+                            )
+                        ) : (
+                            mobileAuthLinks
+                        )
+                    }
                 </div>
             </div>
         </>

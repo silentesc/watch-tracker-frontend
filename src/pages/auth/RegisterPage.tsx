@@ -1,9 +1,13 @@
 import { useState } from "react";
 import InputText from "../../components/ui/InputText";
 import Button from "../../components/ui/Button";
+import { register } from "../../api/auth";
+import { useMutation } from "@tanstack/react-query";
+import Error from "../../components/ui/Error";
+import Loading from "../../components/ui/Loading";
+import Info from "../../components/ui/Info";
 
 function RegisterPage() {
-
     const [username, setUsername] = useState("");
     const [usernameError, setUsernameError] = useState("");
 
@@ -13,7 +17,12 @@ function RegisterPage() {
     const [confirmPassword, setConfirmPassword] = useState("");
     const [confirmPasswordError, setConfirmPasswordError] = useState("");
 
-    const onSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
+    const mutation = useMutation({
+        mutationFn: (data: { username: string, password: string }) => register(data.username, data.password),
+    });
+
+    // Register
+    const onSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         // Reset error messages
@@ -42,11 +51,15 @@ function RegisterPage() {
             return;
         }
 
-        console.log(`Register: Username ${username} | Password ${password}`);
+        mutation.mutate({ username, password });
     }
 
     return (
         <>
+            {mutation.isPending && <Loading />}
+            {mutation.isSuccess && <Info message="Registered successfully. You can log in now." />}
+            {mutation.isError && <Error message={mutation.error.message} />}
+
             <form onSubmit={onSubmit} className="flex justify-center m-10">
                 <div className="w-120 p-7 bg-background-primary shadow-[0_0_40px_-10px_rgba(0,0,0,0.5)]">
                     <div className="mb-5">

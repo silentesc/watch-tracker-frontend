@@ -3,7 +3,9 @@
 @theme {
     --color-primary: #3a31d8;
     --color-secondary: #252439;
-    --color-error: #d70027;
+
+    --color-success: #2ec260;
+    --color-error: #cb2f4c;
 
     --color-foreground-primary: rgba(255, 255, 255, 87);
     --color-foreground-secondary: rgba(200, 200, 200, 87);
