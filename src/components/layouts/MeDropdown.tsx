@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import type { Me } from "../../api/me"
 import { logout } from "../../api/auth";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -10,11 +10,29 @@ interface MeDropdownProps {
 
 export function MeDropdown({ me }: MeDropdownProps) {
     const [isOpen, setIsOpen] = useState(false);
+    const dropdownRef = useRef<HTMLDivElement>(null);
 
     const toggleDropdown = () => setIsOpen(!isOpen);
 
     const queryClient = useQueryClient();
     const navigate = useNavigate();
+
+    // Close dropdown when clicking outside
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+                setIsOpen(false);
+            }
+        };
+
+        if (isOpen) {
+            document.addEventListener("mousedown", handleClickOutside);
+        }
+
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [isOpen]);
 
     const mutation = useMutation({
         mutationFn: logout,
@@ -29,7 +47,7 @@ export function MeDropdown({ me }: MeDropdownProps) {
     }
 
     return (
-        <div className="relative inline-block text-left">
+        <div className="relative inline-block text-left" ref={dropdownRef}>
             {/* Trigger Button */}
             <button
                 onClick={toggleDropdown}
