@@ -1,3 +1,4 @@
+import { useAuthStore } from "../stores/useAuthStore";
 import { api } from "./client";
 import { error2userMessage } from "./errors";
 
@@ -21,9 +22,11 @@ async function sha256(plaintext: string): Promise<string> {
  * @returns void
  */
 export async function register(username: string, password: string) {
-    const passwordHashed = await sha256(password);
+    if (import.meta.env.VITE_VITE_SHA256_PASSWORDS) {
+        password = await sha256(password);
+    }
     try {
-        await api.post("/auth/register", { "username": username, "password": passwordHashed });
+        await api.post("/auth/register", { "username": username, "password": password });
     } catch (err) {
         throw new Error(error2userMessage(err));
     }
@@ -36,9 +39,25 @@ export async function register(username: string, password: string) {
  * @returns void
  */
 export async function login(username: string, password: string) {
-    const passwordHashed = await sha256(password);
+    if (import.meta.env.VITE_VITE_SHA256_PASSWORDS) {
+        password = await sha256(password);
+    }
     try {
-        await api.post("/auth/login", { "username": username, "password": passwordHashed });
+        await api.post("/auth/login", { "username": username, "password": password });
+        useAuthStore.getState().setIsLoggedIn(true);
+    } catch (err) {
+        throw new Error(error2userMessage(err));
+    }
+}
+
+/**
+ * Logout user
+ * @returns void
+ */
+export async function logout() {
+    try {
+        await api.post("/auth/logout");
+        useAuthStore.getState().setIsLoggedIn(false);
     } catch (err) {
         throw new Error(error2userMessage(err));
     }

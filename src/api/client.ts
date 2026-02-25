@@ -1,5 +1,5 @@
 import axios from "axios";
-// import { logout } from "./auth";
+import { logout } from "./auth";
 
 export const api = axios.create({
     baseURL: import.meta.env.VITE_API_URL,
@@ -17,7 +17,7 @@ api.interceptors.response.use(
         if (err.response.status != 401) {
             return;
         }
-        // await logout();
+        await logout();
 
         return Promise.reject(err);
     }
