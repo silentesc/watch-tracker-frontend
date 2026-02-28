@@ -101,7 +101,7 @@ function Navbar() {
                                 <Loading />
                             ) : (
                                 me.isSuccess ? (
-                                    <MeDropdown me={me.data} />
+                                    <MeDropdown me={me.data} isMobile />
                                 ) : (
                                     mobileAuthLinks
                                 )
