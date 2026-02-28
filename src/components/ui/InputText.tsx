@@ -1,4 +1,4 @@
-interface InputTextProps {
+interface InputTextProps extends React.InputHTMLAttributes<HTMLInputElement> {
     type?: "date" | "datetime-local" | "time" | "email" | "number" | "password" | "search" | "tel" | "text" | "url";
     placeholder?: string;
     required?: boolean;

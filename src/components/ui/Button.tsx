@@ -1,4 +1,4 @@
-interface ButtonProps {
+interface ButtonProps extends React.ButtonHTMLAttributes <HTMLButtonElement> {
     value: string;
     type?: "button" | "submit" | "reset";
     onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
