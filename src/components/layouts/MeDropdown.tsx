@@ -6,13 +6,16 @@ import { useNavigate } from "react-router";
 
 interface MeDropdownProps {
     me: Me;
+    isMobile?: boolean;
 }
 
-export function MeDropdown({ me }: MeDropdownProps) {
+export function MeDropdown({ me, isMobile = false }: MeDropdownProps) {
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
 
-    const toggleDropdown = () => setIsOpen(!isOpen);
+    const toggleDropdown = () => {
+        setIsOpen(!isOpen);
+    };
 
     const queryClient = useQueryClient();
     const navigate = useNavigate();
@@ -34,6 +37,7 @@ export function MeDropdown({ me }: MeDropdownProps) {
         };
     }, [isOpen]);
 
+    // Logout mutation
     const mutation = useMutation({
         mutationFn: logout,
         onSuccess: () => {
@@ -42,6 +46,7 @@ export function MeDropdown({ me }: MeDropdownProps) {
         }
     });
 
+    // Logout event
     const onLogout = () => {
         mutation.mutate();
     }
@@ -51,7 +56,7 @@ export function MeDropdown({ me }: MeDropdownProps) {
             {/* Trigger Button */}
             <button
                 onClick={toggleDropdown}
-                className="inline-flex justify-center w-full px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                className="inline-flex justify-center w-full outline-none items-center text-xl hover:cursor-pointer"
             >
                 {me.username}
                 <svg className="w-5 h-5 ml-2 -mr-1" viewBox="0 0 20 20" fill="currentColor">
@@ -61,14 +66,13 @@ export function MeDropdown({ me }: MeDropdownProps) {
 
             {/* Dropdown Menu */}
             {isOpen && (
-                <div className="absolute right-0 w-56 mt-2 origin-top-right bg-white border border-gray-200 divide-y divide-gray-100 rounded-md shadow-lg outline-none">
+                <div className={`absolute w-56 mt-2 origin-top-right bg-background-secondary border border-background-tertiary divide-y divide-background-tertiary rounded-md shadow-lg outline-none ${isMobile ? "-right-1/2 bottom-10" : "right-0"}`}>
                     <div className="py-1">
-                        <a href="#account" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Account settings</a>
-                        <a href="#support" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Support</a>
-                        <a href="#license" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">License</a>
+                        <button className="block w-full px-4 py-2 text-md text-left transition-colors hover:bg-background-tertiary hover:cursor-pointer">Dummy 1</button>
+                        <button className="block w-full px-4 py-2 text-md text-left transition-colors hover:bg-background-tertiary hover:cursor-pointer">Dummy 2</button>
                     </div>
                     <div className="py-1">
-                        <button className="block w-full px-4 py-2 text-sm text-left text-gray-700 hover:bg-gray-100" onClick={onLogout}>Sign out</button>
+                        <button className="block w-full px-4 py-2 text-md text-left transition-colors hover:bg-background-tertiary hover:cursor-pointer" onClick={onLogout}>Sign out</button>
                     </div>
                 </div>
             )}
