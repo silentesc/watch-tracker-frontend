@@ -36,7 +36,7 @@ function Navbar() {
                         </div>
 
                         {/* Desktop Nav */}
-                        <div className="hidden sm:flex w-full">
+                        <div className="hidden sm:flex w-full items-center">
                             {/* Left */}
                             <div>
                                 <NavLink className="mx-2 text-2xl" to="/browse">Browse</NavLink>
